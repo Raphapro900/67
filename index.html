@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Meme 67 Sincronizado</title>
+  <title>Meme 67 con Reverb</title>
   <style>
     body {
       margin: 0;
@@ -26,6 +26,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 200px;
+      cursor: pointer;
     }
 
     .hand-left, .hand-right {
@@ -34,15 +35,8 @@
       transition: transform 0.46s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .hand-left {
-      bottom: 0;
-      left: 0;
-    }
-
-    .hand-right {
-      bottom: 0;
-      right: 0;
-    }
+    .hand-left { bottom: 0; left: 0; }
+    .hand-right { bottom: 0; right: 0; }
 
     .audio-ctrl {
       margin-top: 20px;
@@ -66,26 +60,20 @@
       color: #fff;
       border: 1px solid rgba(255,255,255,0.2);
     }
-
     .btn:hover { background: #555; }
-
-    .hint {
-      opacity: 0.7;
-      font-size: 12px;
-    }
+    .hint { opacity: 0.7; font-size: 12px; }
   </style>
 </head>
 <body>
   <div class="container">
-    <img src="sixeven.png" alt="SixEven" class="center">
+    <img src="sixeven.png" alt="SixEven" class="center" id="sixEven">
     <img src="67 mano.png" alt="Mano Izquierda" class="hand-left" id="handLeft">
     <img src="67 mano.png" alt="Mano Derecha" class="hand-right" id="handRight">
   </div>
 
-  <!-- Audio -->
+  <!-- Audio base -->
   <audio id="audio67" src="67.wav" loop></audio>
 
-  <!-- Controles -->
   <div class="audio-ctrl">
     <button class="btn" id="playPause">Reproducir</button>
     <label>
@@ -101,6 +89,7 @@
     const vol = document.getElementById('volume');
     const handLeft = document.getElementById('handLeft');
     const handRight = document.getElementById('handRight');
+    const sixEven = document.getElementById('sixEven');
 
     let interval;
     const beatDuration = 60 / 130 * 1000; // ~462 ms por beat
@@ -135,7 +124,6 @@
         }
       }, beatDuration);
 
-      // Reinicia animación al final de la pista
       setTimeout(() => {
         stopHands();
         startHands();
@@ -148,9 +136,45 @@
       handRight.style.transform = "translateY(0)";
     }
 
-    // Reinicia también cuando el audio hace loop
     audio.addEventListener('ended', () => {
       stopHands();
+      startHands();
+    });
+
+    // --- Reverb para SIX SEVEN.mp3 ---
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    const ctx = new AudioContext();
+    let convolver = ctx.createConvolver();
+    let gainNode = ctx.createGain();
+    gainNode.gain.value = 1;
+
+    // Cargar respuesta impulsional (puedes usar un archivo IR.wav con reverb real)
+    fetch("impulse-response.wav") // archivo de respuesta impulsional
+      .then(resp => resp.arrayBuffer())
+      .then(buf => ctx.decodeAudioData(buf))
+      .then(irBuffer => {
+        convolver.buffer = irBuffer;
+      });
+
+    sixEven.addEventListener('click', async () => {
+      const response = await fetch("SIX SEVEN.mp3");
+      const arrayBuffer = await response.arrayBuffer();
+      const audioBuffer = await ctx.decodeAudioData(arrayBuffer);
+
+      const source = ctx.createBufferSource();
+      source.buffer = audioBuffer;
+
+      // Conectar: source -> convolver -> gain -> destino
+      source.connect(convolver);
+      convolver.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      source.start(0);
+    });
+  </script>
+</body>
+</html>
+
       startHands();
     });
   </script>
