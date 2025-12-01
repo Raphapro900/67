@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Meme 67 Animado</title>
+  <title>Meme 67 Sincronizado</title>
   <style>
     body {
       margin: 0;
@@ -10,7 +10,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      background: #000; /* fondo negro */
+      background: #000;
       flex-direction: column;
     }
 
@@ -31,33 +31,19 @@
     .hand-left, .hand-right {
       position: absolute;
       width: 100px;
+      transition: transform 0.46s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
     .hand-left {
       bottom: 0;
       left: 0;
-      animation: upDown 1s cubic-bezier(0.25, 1, 0.5, 1) infinite;
     }
 
     .hand-right {
       bottom: 0;
       right: 0;
-      animation: downUp 1s cubic-bezier(0.25, 1, 0.5, 1) infinite;
     }
 
-    @keyframes upDown {
-      0%   { transform: translateY(0); }
-      50%  { transform: translateY(-40px); }
-      100% { transform: translateY(0); }
-    }
-
-    @keyframes downUp {
-      0%   { transform: translateY(-40px); }
-      50%  { transform: translateY(0); }
-      100% { transform: translateY(-40px); }
-    }
-
-    /* Estilos del control de audio */
     .audio-ctrl {
       margin-top: 20px;
       display: flex;
@@ -87,26 +73,19 @@
       opacity: 0.7;
       font-size: 12px;
     }
-
-    input[type="range"] {
-      vertical-align: middle;
-    }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- Imagen central -->
     <img src="sixeven.png" alt="SixEven" class="center">
-    <!-- Mano izquierda animada -->
-    <img src="67 mano.png" alt="Mano Izquierda" class="hand-left">
-    <!-- Mano derecha animada -->
-    <img src="67 mano.png" alt="Mano Derecha" class="hand-right">
+    <img src="67 mano.png" alt="Mano Izquierda" class="hand-left" id="handLeft">
+    <img src="67 mano.png" alt="Mano Derecha" class="hand-right" id="handRight">
   </div>
 
-  <!-- Audio en loop -->
+  <!-- Audio -->
   <audio id="audio67" src="67.wav" loop></audio>
 
-  <!-- Controles de audio -->
+  <!-- Controles -->
   <div class="audio-ctrl">
     <button class="btn" id="playPause">Reproducir</button>
     <label>
@@ -120,19 +99,59 @@
     const audio = document.getElementById('audio67');
     const playBtn = document.getElementById('playPause');
     const vol = document.getElementById('volume');
+    const handLeft = document.getElementById('handLeft');
+    const handRight = document.getElementById('handRight');
+
+    let interval;
+    const beatDuration = 60 / 130 * 1000; // ~462 ms por beat
+    const trackDuration = 14871; // duración exacta en ms
 
     playBtn.addEventListener('click', async () => {
       if (audio.paused) {
         await audio.play();
         playBtn.textContent = 'Pausar';
+        startHands();
       } else {
         audio.pause();
         playBtn.textContent = 'Reproducir';
+        stopHands();
       }
     });
 
     vol.addEventListener('input', (e) => {
       audio.volume = parseFloat(e.target.value);
+    });
+
+    function startHands() {
+      let toggle = false;
+      interval = setInterval(() => {
+        toggle = !toggle;
+        if (toggle) {
+          handLeft.style.transform = "translateY(-40px)";
+          handRight.style.transform = "translateY(0)";
+        } else {
+          handLeft.style.transform = "translateY(0)";
+          handRight.style.transform = "translateY(-40px)";
+        }
+      }, beatDuration);
+
+      // Reinicia animación al final de la pista
+      setTimeout(() => {
+        stopHands();
+        startHands();
+      }, trackDuration);
+    }
+
+    function stopHands() {
+      clearInterval(interval);
+      handLeft.style.transform = "translateY(0)";
+      handRight.style.transform = "translateY(0)";
+    }
+
+    // Reinicia también cuando el audio hace loop
+    audio.addEventListener('ended', () => {
+      stopHands();
+      startHands();
     });
   </script>
 </body>
