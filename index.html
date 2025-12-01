@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>6767676767676767676767</title>
+  <title>Meme 67 Sincronizado</title>
   <style>
     body {
       margin: 0;
@@ -96,11 +96,10 @@
 
     let interval;
     const beatDuration = 60 / 130 * 1000; // ~462 ms por beat
-    const trackDuration = 14871; // duración exacta en ms
 
     playBtn.addEventListener('click', async () => {
       if (audio.paused) {
-        audio.currentTime = 0; // siempre reinicia desde el inicio
+        audio.currentTime = 0; // reinicia siempre
         await audio.play();
         playBtn.textContent = 'Pausar';
         startHands();
@@ -135,12 +134,6 @@
           handRight.style.transform = "translateY(-40px)";
         }
       }, beatDuration);
-
-      // Reinicia animación al final de la pista
-      setTimeout(() => {
-        stopHands();
-        startHands();
-      }, trackDuration);
     }
 
     function stopHands() {
@@ -148,12 +141,6 @@
       handLeft.style.transform = "translateY(0)";
       handRight.style.transform = "translateY(0)";
     }
-
-    // Cuando el audio hace loop, reinicia animación
-    audio.addEventListener('ended', () => {
-      stopHands();
-      startHands();
-    });
   </script>
 </body>
 </html>
