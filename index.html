@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Meme 67</title>
+  <style>
+    :root {
+      --bg: #0f0f12;
+      --face: #ffd182;
+      --hair: #1a1a1a;
+      --shirt: #3a7bd5;
+      --outline: #222;
+    }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      background: radial-gradient(circle at 50% 30%, #15171c, var(--bg));
+      color: #fff;
+      font-family: system-ui, sans-serif;
+      overflow: hidden;
+    }
+
+    .stage {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: grid;
+      place-items: center;
+    }
+
+    .container {
+      width: min(500px, 90vw);
+      aspect-ratio: 1/1;
+      position: relative;
+    }
+
+    /* Animaciones */
+    @keyframes handsUpDown {
+      0%   { transform: translateY(0) rotate(0deg); }
+      25%  { transform: translateY(-20px) rotate(-3deg); }
+      50%  { transform: translateY(-35px) rotate(-6deg); }
+      75%  { transform: translateY(-20px) rotate(-3deg); }
+      100% { transform: translateY(0) rotate(0deg); }
+    }
+
+    @keyframes bounceBody {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-6px); }
+    }
+
+    .arm {
+      transform-origin: 50% 0%;
+      animation: handsUpDown 0.9s ease-in-out infinite;
+      filter: drop-shadow(0 2px 0 rgba(0,0,0,0.25));
+    }
+    .arm.right {
+      animation-delay: 0.1s; /* pequeño desfase para más “vivo” */
+    }
+
+    .body {
+      animation: bounceBody 0.9s ease-in-out infinite;
+    }
+
+    .audio-ctrl {
+      position: fixed;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(0,0,0,0.35);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .btn {
+      all: unset;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #2a2f3a;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .btn:hover { background: #343a46; }
+
+    .hint {
+      opacity: 0.8;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="stage">
+    <div class="container">
+      <!-- SVG del “67”: cara, cuerpo y brazos -->
+      <svg viewBox="0 0 500 500" width="100%" height="100%" aria-label="Meme 67">
+        <!-- Brazos (animados) -->
+        <g class="arm left">
+          <!-- brazo izquierdo -->
+          <path d="M180 240 C150 210, 130 170, 120 130 C118 120, 130 110, 142 115 C165 125, 190 160, 205 190"
+                fill="none" stroke="#f2c48a" stroke-width="22" stroke-linecap="round"/>
+          <!-- mano izquierda -->
+          <circle cx="118" cy="128" r="18" fill="#f2c48a" stroke="#d2a06a" stroke-width="3"/>
+          <!-- dedos estilizados -->
+          <path d="M110 112 l-10 -16 M118 110 l-5 -18 M126 112 l6 -16"
+                stroke="#f2c48a" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <g class="arm right">
+          <!-- brazo derecho -->
+          <path d="M320 240 C350 210, 370 170, 380 130 C382 120, 370 110, 358 115 C335 125, 310 160, 295 190"
+                fill="none" stroke="#f2c48a" stroke-width="22" stroke-linecap="round"/>
+          <!-- mano derecha -->
+          <circle cx="382" cy="128" r="18" fill="#f2c48a" stroke="#d2a06a" stroke-width="3"/>
+          <!-- dedos estilizados -->
+          <path d="M390 112 l10 -16 M382 110 l5 -18 M374 112 l-6 -16"
+                stroke="#f2c48a" stroke-width="6" stroke-linecap="round"/>
+        </g>
+
+        <!-- Cuerpo rebotando -->
+        <g class="body">
+          <!-- torso/camisa -->
+          <path d="M160 300 C160 250, 210 230, 250 230 C290 230, 340 250, 340 300
+                   C340 360, 310 400, 250 410 C190 400, 160 360, 160 300 Z"
+                fill="url(#shirtGrad)" stroke="#243c78" stroke-width="4"/>
+          <!-- cuello -->
+          <rect x="230" y="220" width="40" height="24" rx="10" fill="#f2c48a" />
+          <!-- cabeza -->
+          <g>
+            <!-- pelo -->
+            <path d="M180 175 C190 130, 220 110, 250 108 C280 106, 310 120, 320 155
+                     C324 170, 320 185, 315 192 C290 165, 210 160, 185 188 Z"
+                  fill="var(--hair)"/>
+            <!-- cara -->
+            <circle cx="250" cy="200" r="56" fill="var(--face)" stroke="var(--outline)" stroke-width="3"/>
+            <!-- ojos -->
+            <circle cx="232" cy="195" r="6" fill="#111"/>
+            <circle cx="268" cy="195" r="6" fill="#111"/>
+            <!-- cejas -->
+            <path d="M222 184 q10 -8 20 0" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+            <path d="M258 184 q10 -8 20 0" stroke="#111" stroke-width="4" stroke-linecap="round"/>
+            <!-- boca (sonrisa 67) -->
+            <path d="M230 215 q20 20 40 0" stroke="#9a4a2a" stroke-width="5" fill="none" stroke-linecap="round"/>
+          </g>
+        </g>
+
+        <!-- Sombra simple -->
+        <ellipse cx="250" cy="440" rx="110" ry="16" fill="rgba(0,0,0,0.25)"/>
+
+        <!-- Gradientes -->
+        <defs>
+          <linearGradient id="shirtGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#3a7bd5"/>
+            <stop offset="100%" stop-color="#00d2ff"/>
+          </linearGradient>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <!-- Audio 67.wav en loop -->
+  <audio id="audio67" src="67.wav" loop></audio>
+
+  <div class="audio-ctrl">
+    <button class="btn" id="playPause">Reproducir</button>
+    <label>
+      Volumen
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8"/>
+    </label>
+    <span class="hint">Si el navegador bloquea autoplay, usa “Reproducir”.</span>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audio67');
+    const playBtn = document.getElementById('playPause');
+    const vol = document.getElementById('volume');
+
+    // Intento de autoplay (algunos navegadores lo bloquean sin interacción)
+    document.addEventListener('DOMContentLoaded', () => {
+      audio.volume = parseFloat(vol.value);
+      const tryPlay = audio.play();
+      if (tryPlay instanceof Promise) {
+        tryPlay.then(() => {
+          playBtn.textContent = 'Pausar';
+        }).catch(() => {
+          // Bloqueado: quedará esperando interacción
+          playBtn.textContent = 'Reproducir';
+        });
+      }
+    });
+
+    playBtn.addEventListener('click', async () => {
+      if (audio.paused) {
+        await audio.play();
+        playBtn.textContent = 'Pausar';
+      } else {
+        audio.pause();
+        playBtn.textContent = 'Reproducir';
+      }
+    });
+
+    vol.addEventListener('input', (e) => {
+      audio.volume = parseFloat(e.target.value);
+    });
+  </script>
+</body>
+</html>
