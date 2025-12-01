@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Meme 67 Sincronizado</title>
+  <title>6767676767676767676767</title>
   <style>
     body {
       margin: 0;
@@ -26,7 +26,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 200px;
-      cursor: pointer; /* click habilitado */
+      cursor: pointer;
     }
 
     .hand-left, .hand-right {
@@ -66,20 +66,16 @@
 </head>
 <body>
   <div class="container">
-    <!-- Imagen central con click -->
     <img src="sixeven.png" alt="SixEven" class="center" id="sixEven">
-    <!-- Mano izquierda -->
     <img src="67 mano.png" alt="Mano Izquierda" class="hand-left" id="handLeft">
-    <!-- Mano derecha -->
     <img src="67 mano.png" alt="Mano Derecha" class="hand-right" id="handRight">
   </div>
 
   <!-- Audio principal -->
   <audio id="audio67" src="67.wav" loop></audio>
-  <!-- Audio que suena al hacer click -->
+  <!-- Audio secundario al click -->
   <audio id="audioSixSeven" src="SIX SEVEN.mp3"></audio>
 
-  <!-- Controles -->
   <div class="audio-ctrl">
     <button class="btn" id="playPause">Reproducir</button>
     <label>
@@ -104,11 +100,13 @@
 
     playBtn.addEventListener('click', async () => {
       if (audio.paused) {
+        audio.currentTime = 0; // siempre reinicia desde el inicio
         await audio.play();
         playBtn.textContent = 'Pausar';
         startHands();
       } else {
         audio.pause();
+        audio.currentTime = 0; // al pausar, reinicia
         playBtn.textContent = 'Reproducir';
         stopHands();
       }
@@ -118,13 +116,14 @@
       audio.volume = parseFloat(e.target.value);
     });
 
-    // Al hacer click en sixeven.png suena SIX SEVEN.mp3
+    // Click en sixeven.png → suena SIX SEVEN.mp3
     sixEven.addEventListener('click', () => {
       audioSixSeven.currentTime = 0;
       audioSixSeven.play();
     });
 
     function startHands() {
+      stopHands(); // limpiar cualquier animación previa
       let toggle = false;
       interval = setInterval(() => {
         toggle = !toggle;
@@ -137,6 +136,7 @@
         }
       }, beatDuration);
 
+      // Reinicia animación al final de la pista
       setTimeout(() => {
         stopHands();
         startHands();
@@ -149,6 +149,7 @@
       handRight.style.transform = "translateY(0)";
     }
 
+    // Cuando el audio hace loop, reinicia animación
     audio.addEventListener('ended', () => {
       stopHands();
       startHands();
