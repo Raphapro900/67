@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>6767676767676767SIX SEVEN676767676767676767676767SEIS SIETE6767676767676767676767676767</title>
+  <title>Meme 67 Sincronizado</title>
   <style>
     body {
       margin: 0;
@@ -26,7 +26,7 @@
       left: 50%;
       transform: translate(-50%, -50%);
       width: 200px;
-      cursor: pointer;
+      cursor: pointer; /* click habilitado */
     }
 
     .hand-left, .hand-right {
@@ -35,8 +35,16 @@
       transition: transform 0.46s cubic-bezier(0.25, 1, 0.5, 1);
     }
 
-    .hand-left { bottom: 0; left: 0; }
-    .hand-right { bottom: 0; right: 0; }
+    .hand-left {
+      bottom: 0;
+      left: 0;
+      transform: scaleX(-1); /* mano izquierda volteada */
+    }
+
+    .hand-right {
+      bottom: 0;
+      right: 0;
+    }
 
     .audio-ctrl {
       margin-top: 20px;
@@ -66,8 +74,11 @@
 </head>
 <body>
   <div class="container">
+    <!-- Imagen central -->
     <img src="sixeven.png" alt="SixEven" class="center" id="sixEven">
+    <!-- Mano izquierda -->
     <img src="67 mano.png" alt="Mano Izquierda" class="hand-left" id="handLeft">
+    <!-- Mano derecha -->
     <img src="67 mano.png" alt="Mano Derecha" class="hand-right" id="handRight">
   </div>
 
@@ -127,10 +138,10 @@
       interval = setInterval(() => {
         toggle = !toggle;
         if (toggle) {
-          handLeft.style.transform = "translateY(-40px)";
+          handLeft.style.transform = "scaleX(-1) translateY(-40px)";
           handRight.style.transform = "translateY(0)";
         } else {
-          handLeft.style.transform = "translateY(0)";
+          handLeft.style.transform = "scaleX(-1) translateY(0)";
           handRight.style.transform = "translateY(-40px)";
         }
       }, beatDuration);
@@ -138,7 +149,7 @@
 
     function stopHands() {
       clearInterval(interval);
-      handLeft.style.transform = "translateY(0)";
+      handLeft.style.transform = "scaleX(-1) translateY(0)";
       handRight.style.transform = "translateY(0)";
     }
   </script>
