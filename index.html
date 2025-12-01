@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <title>Meme 67 Animado</title>
   <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000; /* fondo negro */
+      flex-direction: column;
+    }
+
     .container {
       position: relative;
       width: 400px;
@@ -46,6 +56,41 @@
       50%  { transform: translateY(0); }
       100% { transform: translateY(-40px); }
     }
+
+    /* Estilos del control de audio */
+    .audio-ctrl {
+      margin-top: 20px;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 10px;
+      padding: 8px 12px;
+      color: #fff;
+      font-family: sans-serif;
+    }
+
+    .btn {
+      all: unset;
+      cursor: pointer;
+      padding: 6px 10px;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .btn:hover { background: #555; }
+
+    .hint {
+      opacity: 0.7;
+      font-size: 12px;
+    }
+
+    input[type="range"] {
+      vertical-align: middle;
+    }
   </style>
 </head>
 <body>
@@ -59,6 +104,36 @@
   </div>
 
   <!-- Audio en loop -->
-  <audio src="67.wav" autoplay loop></audio>
+  <audio id="audio67" src="67.wav" loop></audio>
+
+  <!-- Controles de audio -->
+  <div class="audio-ctrl">
+    <button class="btn" id="playPause">Reproducir</button>
+    <label>
+      Volumen
+      <input id="volume" type="range" min="0" max="1" step="0.01" value="0.8"/>
+    </label>
+    <span class="hint">Si el navegador bloquea autoplay, usa “Reproducir”.</span>
+  </div>
+
+  <script>
+    const audio = document.getElementById('audio67');
+    const playBtn = document.getElementById('playPause');
+    const vol = document.getElementById('volume');
+
+    playBtn.addEventListener('click', async () => {
+      if (audio.paused) {
+        await audio.play();
+        playBtn.textContent = 'Pausar';
+      } else {
+        audio.pause();
+        playBtn.textContent = 'Reproducir';
+      }
+    });
+
+    vol.addEventListener('input', (e) => {
+      audio.volume = parseFloat(e.target.value);
+    });
+  </script>
 </body>
 </html>
