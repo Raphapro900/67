@@ -143,6 +143,8 @@
 
     function showDay() {
       if (index >= days.length) {
+        // Al terminar: redirige y reinicia ciclo
+        localStorage.removeItem(VISITED_KEY);
         window.location.href = 'https://Raphapro900.github.io/2025/';
         return;
       }
