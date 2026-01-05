@@ -3,292 +3,149 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Página expirada</title>
+  <title>Página Expirada</title>
   <style>
-    :root {
-      --bg: #0f0f12;
-      --fg: #e9e9ef;
-      --muted: #a3a3b0;
-      --accent: #22c55e;
-      --danger: #ef4444;
-      --card: #17171c;
-    }
-    html, body {
-      height: 100%;
+    body {
       margin: 0;
-      background: var(--bg);
-      color: var(--fg);
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    }
-    .wrap {
-      min-height: 100%;
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      font-family: Arial, sans-serif;
+      background: #111;
+      color: #eee;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
     }
     .card {
-      width: min(720px, 92vw);
-      background: var(--card);
-      border: 1px solid #22232a;
-      border-radius: 16px;
-      padding: 24px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.35);
-    }
-    .title {
-      margin: 0 0 10px 0;
-      font-weight: 800;
-      font-size: clamp(22px, 4vw, 32px);
-      letter-spacing: 0.2px;
-    }
-    .subtitle {
-      margin: 0 0 18px 0;
-      color: var(--muted);
-      font-size: clamp(14px, 2.4vw, 16px);
-      line-height: 1.5;
-    }
-    .row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px;
-      align-items: center;
-      margin-top: 10px;
+      background: #222;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      text-align: center;
     }
     .btn {
-      appearance: none;
-      border: 0;
-      outline: 0;
-      padding: 12px 16px;
-      border-radius: 10px;
-      font-weight: 700;
+      background: #22c55e;
+      color: #000;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
       cursor: pointer;
-      transition: transform 120ms ease, box-shadow 120ms ease, background 120ms ease;
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
+      margin-top: 15px;
     }
-    .btn:active { transform: translateY(1px); }
-    .btn-primary { background: var(--accent); color: #06290f; box-shadow: 0 8px 20px rgba(34,197,94,0.25); }
-    .btn-primary:hover { filter: brightness(1.05); }
-    .btn-ghost { background: #22232a; color: var(--fg); }
-    .small {
-      font-size: 13px;
-      color: var(--muted);
-    }
-    .iframe-wrap {
-      position: relative;
-      width: 100%;
-      padding-top: 56.25%;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #22232a;
-      background: #101114;
-      margin-top: 14px;
-    }
-    .iframe-wrap iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-    }
-    .shake {
-      animation: shake 0.6s cubic-bezier(.36,.07,.19,.97) infinite;
-    }
-    @keyframes shake {
-      10%, 90% { transform: translate3d(-1px, 0, 0); }
-      20%, 80% { transform: translate3d(2px, 0, 0); }
-      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
-      40%, 60% { transform: translate3d(4px, 0, 0); }
-    }
-    .divider {
-      height: 1px; background: #23242b; margin: 16px 0;
-    }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
-    .center { text-align: center; }
-    /* Sections visibility */
+    .btn:hover { filter: brightness(1.1); }
     .hidden { display: none; }
+    .shake { animation: shake 0.6s infinite; }
+    @keyframes shake {
+      10%, 90% { transform: translateX(-1px); }
+      20%, 80% { transform: translateX(2px); }
+      30%, 50%, 70% { transform: translateX(-4px); }
+      40%, 60% { transform: translateX(4px); }
+    }
+    .countdown { font-size: 24px; margin-top: 10px; }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <!-- Expired section -->
-    <section id="expired" class="card">
-      <h1 class="title">Lo Siento, Esta Página Expiró Debido A Un Cambio Del Año.</h1>
-      <p class="subtitle">Para continuar, usa el botón. Si recargas normal, seguirás viendo este mensaje.</p>
-      <div class="row">
-        <button id="reloadWithVideo" class="btn btn-primary">Haz Click Para Recargar La Página</button>
-        <span class="small">Recarga controlada: activará el video al volver a cargar.</span>
-      </div>
-    </section>
-
-    <!-- Video section -->
-    <section id="video" class="card hidden">
-      <h2 class="title">Contenido recargado</h2>
-      <p class="subtitle">Disfruta el video. Si vuelves a recargar normal, el video no aparecerá.</p>
-      <div class="iframe-wrap">
-        <iframe
-          id="yt"
-          src="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1&rel=0"
-          title="YouTube video"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen
-        ></iframe>
-      </div>
-      <div class="row">
-        <button id="backToExpired" class="btn btn-ghost">Volver al estado expirado</button>
-      </div>
-    </section>
-
-    <!-- OYE section (return visit) -->
-    <section id="oye" class="card hidden">
-      <div id="oyeShake" class="shake">
-        <h2 class="title">OYE, YA ENTRASTE AQUÍ ANTES, ¿QUÉ QUIERES? ¿Y QUÉ ES 67?!!!</h2>
-        <p class="subtitle">Desliza hacia abajo para ver más opciones. Tras unos segundos, se descargará un archivo con un aviso.</p>
-      </div>
-
-      <div style="height: 16px;"></div>
-      <div class="divider"></div>
-
-      <div class="row">
-        <button id="showDate" class="btn btn-ghost">Mostrar fecha y cuenta atrás</button>
-      </div>
-
-      <div id="dateArea" class="hidden">
-        <p class="subtitle"><strong class="mono">Fecha del dispositivo:</strong> <span id="deviceDate" class="mono"></span></p>
-        <p class="subtitle"><strong class="mono">Cuenta atrás hasta el 1 de diciembre:</strong></p>
-        <div class="card" style="background:#14151a; border-color:#242632;">
-          <p class="center mono" style="font-size: clamp(18px, 4vw, 28px); margin: 8px 0;">
-            <span id="dd">00</span>d :
-            <span id="hh">00</span>h :
-            <span id="mm">00</span>m :
-            <span id="ss">00</span>s
-          </p>
-          <p class="small center">Al llegar a cero, serás redirigido a <span class="mono">https://Raphapro900.github.io/2025/</span></p>
-        </div>
-      </div>
-    </section>
+  <div class="card" id="expired">
+    <h1>Lo Siento, Esta Página Expiró Debido A Un Cambio Del Año.</h1>
+    <button class="btn" id="reloadWithVideo">Haz Click Para Recargar La Página</button>
   </div>
 
-  <script>
-    // Helpers
-    const qs = (sel) => document.querySelector(sel);
-    const show = (id) => { qs(id).classList.remove('hidden'); };
-    const hide = (id) => { qs(id).classList.add('hidden'); };
-    const urlHas = (key, val) => new URLSearchParams(window.location.search).get(key) === val;
+  <div class="card hidden" id="video">
+    <h2>Contenido Recargado</h2>
+    <iframe width="560" height="315" src="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1&rel=0"
+      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    <br>
+    <button class="btn" id="backToExpired">Volver al estado expirado</button>
+  </div>
 
-    // State keys
-    const VISITED_KEY = 'visited_once';
+  <div class="card hidden shake" id="oye">
+    <h2>OYE, YA ENTRASTE AQUÍ ANTES, ¿QUÉ QUIERES? ¿Y QUÉ ES 67?!!!</h2>
+    <button class="btn" id="showDate">Mostrar fecha y cuenta atrás</button>
+    <div id="dateArea" class="hidden">
+      <p><strong>Fecha del dispositivo:</strong> <span id="deviceDate"></span></p>
+      <div class="countdown">
+        <span id="dd">00</span>d :
+        <span id="hh">00</span>h :
+        <span id="mm">00</span>m :
+        <span id="ss">00</span>s
+      </div>
+      <p>Al llegar a cero, serás redirigido a <strong>https://Raphapro900.github.io/2025/</strong></p>
+    </div>
+  </div>
 
-    // Determine section to show
-    function route() {
-      const visited = !!localStorage.getItem(VISITED_KEY);
+<script>
+  const qs = sel => document.querySelector(sel);
+  const show = id => qs(id).classList.remove('hidden');
+  const hide = id => qs(id).classList.add('hidden');
+  const urlHas = (key,val) => new URLSearchParams(window.location.search).get(key) === val;
+  const VISITED_KEY = 'visited_once';
 
-      // If URL param video=1, show video (one-shot) regardless of visited state
-      if (urlHas('video', '1')) {
-        hide('#expired');
-        hide('#oye');
-        show('#video');
+  function route() {
+    const visited = !!localStorage.getItem(VISITED_KEY);
 
-        // Immediately remove the ?video=1 param so a normal reload won't show video
-        history.replaceState(null, document.title, window.location.pathname);
-        return;
-      }
-
-      // Return visit: show OYE section
-      if (visited) {
-        hide('#expired');
-        hide('#video');
-        show('#oye');
-        startVbsDownloadTimer(); // 15s auto-download
-        return;
-      }
-
-      // First visit: show expired message
-      hide('#video');
-      hide('#oye');
-      show('#expired');
-    }
-
-    // Button: controlled reload to show video once
-    qs('#reloadWithVideo').addEventListener('click', () => {
-      // Mark visit (so next time entering, OYE)
-      localStorage.setItem(VISITED_KEY, '1');
-      // Reload with param triggering video
-      const base = window.location.pathname;
-      window.location.href = `${base}?video=1`;
-    });
-
-    // Button: return to expired state
-    qs('#backToExpired').addEventListener('click', () => {
+    if (urlHas('video','1')) {
+      hide('#expired'); hide('#oye'); show('#video');
       history.replaceState(null, document.title, window.location.pathname);
-      hide('#video');
-      show('#expired');
-    });
+      return;
+    }
 
-    // OYE: show date and start countdown
-    qs('#showDate').addEventListener('click', () => {
-      show('#dateArea');
-      qs('#deviceDate').textContent = new Date().toLocaleString();
+    if (visited) {
+      hide('#expired'); hide('#video'); show('#oye');
+      startVbsDownloadTimer();
+      return;
+    }
 
-      // Target: upcoming Dec 1 at 00:00:00 local time
-      const now = new Date();
-      const year = now.getMonth() >= 11 ? now.getFullYear() + 1 : now.getFullYear();
-      const target = new Date(year, 11, 1, 0, 0, 0, 0); // Month 11 = December
+    hide('#video'); hide('#oye'); show('#expired');
+  }
 
-      const dd = qs('#dd'), hh = qs('#hh'), mm = qs('#mm'), ss = qs('#ss');
+  qs('#reloadWithVideo').addEventListener('click', () => {
+    localStorage.setItem(VISITED_KEY,'1'); // se marca aquí
+    const base = window.location.pathname;
+    window.location.href = `${base}?video=1`;
+  });
 
-      function tick() {
-        const t = target.getTime() - Date.now();
-        if (t <= 0) {
-          window.location.href = 'https://Raphapro900.github.io/2025/';
-          return;
-        }
-        const total = Math.floor(t / 1000);
-        const d = Math.floor(total / 86400);
-        const h = Math.floor((total % 86400) / 3600);
-        const m = Math.floor((total % 3600) / 60);
-        const s = total % 60;
-        dd.textContent = String(d).padStart(2, '0');
-        hh.textContent = String(h).padStart(2, '0');
-        mm.textContent = String(m).padStart(2, '0');
-        ss.textContent = String(s).padStart(2, '0');
+  qs('#backToExpired').addEventListener('click', () => {
+    history.replaceState(null, document.title, window.location.pathname);
+    hide('#video'); show('#expired');
+  });
+
+  qs('#showDate').addEventListener('click', () => {
+    show('#dateArea');
+    qs('#deviceDate').textContent = new Date().toLocaleString();
+
+    const now = new Date();
+    const year = now.getMonth() >= 11 ? now.getFullYear()+1 : now.getFullYear();
+    const target = new Date(year,11,1,0,0,0,0);
+
+    function tick() {
+      const t = target.getTime() - Date.now();
+      if (t <= 0) {
+        window.location.href = 'https://Raphapro900.github.io/2025/';
+        return;
       }
-      tick();
-      window.countdownTimer && clearInterval(window.countdownTimer);
-      window.countdownTimer = setInterval(tick, 1000);
-    });
-
-    // Auto-download a harmless VBS message after 15 seconds on OYE
-    function startVbsDownloadTimer() {
-      window.vbsTimer && clearTimeout(window.vbsTimer);
-      window.vbsTimer = setTimeout(() => {
-        const vbs = [
-          'Dim message',
-          'message = "SOLO PUEDES INGRESAR AHÍ SI VUELVES A 2025!!!"',
-          'MsgBox message, 48, "Aviso"'
-        ].join('\r\n');
-
-        const blob = new Blob([vbs], { type: 'text/plain' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'aviso.vbs';
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-          URL.revokeObjectURL(url);
-          a.remove();
-        }, 250);
-      }, 15000);
+      const total = Math.floor(t/1000);
+      const d = Math.floor(total/86400);
+      const h = Math.floor((total%86400)/3600);
+      const m = Math.floor((total%3600)/60);
+      const s = total%60;
+      qs('#dd').textContent = String(d).padStart(2,'0');
+      qs('#hh').textContent = String(h).padStart(2,'0');
+      qs('#mm').textContent = String(m).padStart(2,'0');
+      qs('#ss').textContent = String(s).padStart(2,'0');
     }
+    tick();
+    setInterval(tick,1000);
+  });
 
-    // Mark as visited on first load (so leaving and re-entering shows OYE)
-    if (!localStorage.getItem(VISITED_KEY)) {
-      localStorage.setItem(VISITED_KEY, '1');
-    }
-
-    // Initial route
-    route();
-  </script>
-</body>
-</html>
+  function startVbsDownloadTimer() {
+    setTimeout(() => {
+      const vbs = [
+        'Dim message',
+        'message = "SOLO PUEDES INGRESAR AHÍ SI VUELVES A 2025!!!"',
+        'MsgBox message, 48, "Aviso"'
+      ].join('\r\n');
+      const blob = new Blob([vbs], {type:'text/plain'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download
