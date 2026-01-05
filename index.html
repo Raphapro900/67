@@ -42,12 +42,12 @@
     .day {
       font-size: 32px;
       font-weight: bold;
-      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1),
-                  opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      transition: transform 0.4s cubic-bezier(0.77, 0, 0.175, 1),
+                  opacity 0.4s cubic-bezier(0.77, 0, 0.175, 1);
       display: inline-block;
     }
     .fade-out {
-      transform: translateY(-30px);
+      transform: translateY(-40px);
       opacity: 0;
     }
     .fade-in {
@@ -123,7 +123,7 @@
     show('#dateArea');
     qs('#deviceDate').textContent = new Date().toLocaleDateString("es-ES");
 
-    // Animación de días hasta 1 de diciembre 2025
+    // Animación rápida de días hasta 1 de diciembre 2025
     let today = new Date();
     let target = new Date(2025, 11, 1); // 1 diciembre 2025
     let days = [];
@@ -136,6 +136,10 @@
 
     let index = 0;
     const dayDisplay = qs('#dayDisplay');
+
+    // Duración total 5 segundos
+    const totalDuration = 5000;
+    const stepDuration = totalDuration / days.length;
 
     function showDay() {
       if (index >= days.length) {
@@ -152,10 +156,10 @@
         dayDisplay.textContent = str;
         dayDisplay.classList.remove("fade-out");
         dayDisplay.classList.add("fade-in");
-      }, 800);
+      }, stepDuration/2);
 
       index++;
-      setTimeout(showDay, 1500); // cada 1.5s retrocede un día
+      setTimeout(showDay, stepDuration);
     }
 
     showDay();
