@@ -2,14 +2,12 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Página Expirada</title>
+  <title>Animación de días</title>
   <style>
     body {
-      margin: 0;
-      font-family: Arial, sans-serif;
       background: #111;
       color: #eee;
+      font-family: Arial, sans-serif;
       display: flex;
       justify-content: center;
       align-items: center;
@@ -19,133 +17,73 @@
       background: #222;
       padding: 20px;
       border-radius: 10px;
-      max-width: 600px;
       text-align: center;
     }
-    .btn {
-      background: #22c55e;
-      color: #000;
-      padding: 12px 20px;
-      border: none;
-      border-radius: 8px;
+    .day {
+      font-size: 40px;
       font-weight: bold;
-      cursor: pointer;
-      margin-top: 15px;
+      transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1),
+                  opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+      display: inline-block;
     }
-    .btn:hover { filter: brightness(1.1); }
-    .hidden { display: none; }
-    .shake { animation: shake 0.6s infinite; }
-    @keyframes shake {
-      10%, 90% { transform: translateX(-1px); }
-      20%, 80% { transform: translateX(2px); }
-      30%, 50%, 70% { transform: translateX(-4px); }
-      40%, 60% { transform: translateX(4px); }
+    .fade-out {
+      transform: translateY(-30px);
+      opacity: 0;
     }
-    .countdown { font-size: 24px; margin-top: 10px; }
+    .fade-in {
+      transform: translateY(0);
+      opacity: 1;
+    }
   </style>
 </head>
 <body>
-  <div class="card" id="expired">
-    <h1>Lo Siento, Esta Página Expiró Debido A Un Cambio Del Año.</h1>
-    <button class="btn" id="reloadWithVideo">Haz Click Para Recargar La Página</button>
-  </div>
-
-  <div class="card hidden" id="video">
-    <h2>Contenido Recargado</h2>
-    <iframe width="560" height="315" src="https://www.youtube.com/embed/xvFZjo5PgG0?autoplay=1&rel=0"
-      frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
-    <br>
-    <button class="btn" id="backToExpired">Volver al estado expirado</button>
-  </div>
-
-  <div class="card hidden shake" id="oye">
-    <h2>OYE, YA ENTRASTE AQUÍ ANTES, ¿QUÉ QUIERES? ¿Y QUÉ ES 67?!!!</h2>
-    <button class="btn" id="showDate">Mostrar fecha y cuenta atrás</button>
-    <div id="dateArea" class="hidden">
-      <p><strong>Fecha del dispositivo:</strong> <span id="deviceDate"></span></p>
-      <div class="countdown">
-        <span id="dd">00</span>d :
-        <span id="hh">00</span>h :
-        <span id="mm">00</span>m :
-        <span id="ss">00</span>s
-      </div>
-      <p>Al llegar a cero, serás redirigido a <strong>https://Raphapro900.github.io/2025/</strong></p>
-    </div>
+  <div class="card">
+    <h2>Animación de días hasta el 1 de diciembre</h2>
+    <div id="dayDisplay" class="day"></div>
   </div>
 
 <script>
-  const qs = sel => document.querySelector(sel);
-  const show = id => qs(id).classList.remove('hidden');
-  const hide = id => qs(id).classList.add('hidden');
-  const urlHas = (key,val) => new URLSearchParams(window.location.search).get(key) === val;
-  const VISITED_KEY = 'visited_once';
+  const dayDisplay = document.getElementById("dayDisplay");
 
-  function route() {
-    const visited = !!localStorage.getItem(VISITED_KEY);
+  // Fecha actual
+  let today = new Date();
+  // Fecha objetivo: 1 de diciembre del mismo año
+  let target = new Date(today.getFullYear(), 11, 1);
 
-    if (urlHas('video','1')) {
-      hide('#expired'); hide('#oye'); show('#video');
-      history.replaceState(null, document.title, window.location.pathname);
-      return;
-    }
-
-    if (visited) {
-      hide('#expired'); hide('#video'); show('#oye');
-      startVbsDownloadTimer();
-      return;
-    }
-
-    hide('#video'); hide('#oye'); show('#expired');
+  // Generar lista de días desde hoy hasta el 1 de diciembre
+  let days = [];
+  let temp = new Date(today);
+  while (temp >= target) {
+    days.push(new Date(temp));
+    temp.setDate(temp.getDate() - 1);
   }
 
-  qs('#reloadWithVideo').addEventListener('click', () => {
-    localStorage.setItem(VISITED_KEY,'1'); // se marca aquí
-    const base = window.location.pathname;
-    window.location.href = `${base}?video=1`;
-  });
+  let index = 0;
 
-  qs('#backToExpired').addEventListener('click', () => {
-    history.replaceState(null, document.title, window.location.pathname);
-    hide('#video'); show('#expired');
-  });
+  function showDay() {
+    if (index >= days.length) return;
 
-  qs('#showDate').addEventListener('click', () => {
-    show('#dateArea');
-    qs('#deviceDate').textContent = new Date().toLocaleString();
+    const d = days[index];
+    const str = d.toLocaleDateString("es-ES", { day: "numeric", month: "long", year: "numeric" });
 
-    const now = new Date();
-    const year = now.getMonth() >= 11 ? now.getFullYear()+1 : now.getFullYear();
-    const target = new Date(year,11,1,0,0,0,0);
+    // Animación salida
+    dayDisplay.classList.remove("fade-in");
+    dayDisplay.classList.add("fade-out");
 
-    function tick() {
-      const t = target.getTime() - Date.now();
-      if (t <= 0) {
-        window.location.href = 'https://Raphapro900.github.io/2025/';
-        return;
-      }
-      const total = Math.floor(t/1000);
-      const d = Math.floor(total/86400);
-      const h = Math.floor((total%86400)/3600);
-      const m = Math.floor((total%3600)/60);
-      const s = total%60;
-      qs('#dd').textContent = String(d).padStart(2,'0');
-      qs('#hh').textContent = String(h).padStart(2,'0');
-      qs('#mm').textContent = String(m).padStart(2,'0');
-      qs('#ss').textContent = String(s).padStart(2,'0');
-    }
-    tick();
-    setInterval(tick,1000);
-  });
-
-  function startVbsDownloadTimer() {
     setTimeout(() => {
-      const vbs = [
-        'Dim message',
-        'message = "SOLO PUEDES INGRESAR AHÍ SI VUELVES A 2025!!!"',
-        'MsgBox message, 48, "Aviso"'
-      ].join('\r\n');
-      const blob = new Blob([vbs], {type:'text/plain'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download
+      dayDisplay.textContent = str;
+      dayDisplay.classList.remove("fade-out");
+      dayDisplay.classList.add("fade-in");
+    }, 800);
+
+    index++;
+    if (index < days.length) {
+      setTimeout(showDay, 1500); // cada 1.5s retrocede un día
+    }
+  }
+
+  // Iniciar animación
+  showDay();
+</script>
+</body>
+</html>
