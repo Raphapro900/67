@@ -16,6 +16,7 @@
       font-family: sans-serif;
     }
 
+    /* Intro video */
     #introVideo {
       position: fixed;
       top: 0;
@@ -27,6 +28,7 @@
       background: #000;
     }
 
+    /* Overlay para indicar que hay que hacer clic */
     #clickOverlay {
       position: fixed;
       top: 0;
@@ -53,6 +55,7 @@
       backdrop-filter: blur(6px);
     }
 
+    /* Modal de Actualización */
     #updateModal {
       display: none;
       position: fixed;
@@ -92,6 +95,7 @@
       color: #ddd;
     }
 
+    /* Texto con brillo blanco */
     .glow {
       color: #fff;
       text-shadow:
@@ -109,13 +113,7 @@
       margin-bottom: 8px;
     }
 
-    #videoError {
-      display: none;
-      color: #ff6b6b;
-      font-size: 14px;
-      margin-top: 8px;
-    }
-
+    /* Botón X para cerrar */
     #closeModal {
       position: absolute;
       top: 12px;
@@ -135,6 +133,7 @@
       background: rgba(255,255,255,0.15);
     }
 
+    /* Main content */
     #mainContent {
       display: none;
       flex-direction: column;
@@ -212,12 +211,15 @@
 </head>
 <body>
 
+  <!-- Intro video -->
   <video id="introVideo" src="intro.mp4" playsinline></video>
 
+  <!-- Overlay: haz clic para activar el audio -->
   <div id="clickOverlay">
     <span>▶ Haz clic para empezar</span>
   </div>
 
+  <!-- Modal de Actualización -->
   <div id="updateModal">
     <div class="modal-box">
       <button id="closeModal">×</button>
@@ -225,18 +227,11 @@
       <p>
         Esta <span class="glow">update</span> se debe porque el <span class="glow">67</span> daba miedo y asustó a un <span class="glow">streamer</span> por la imagen antigua. Aquí el video. <span class="glow">Gracias.</span>
       </p>
-
-      <video id="updateVideo" controls playsinline preload="auto">
-        <source src="https://files.catbox.moe/fl6lh2.mp4" type="video/mp4">
-        Tu navegador no soporta el video.
-      </video>
-
-      <div id="videoError">
-        ⚠ El video no se pudo cargar.
-      </div>
+      <video id="updateVideo" src="Bixss.mp4" controls playsinline></video>
     </div>
   </div>
 
+  <!-- Main content -->
   <div id="mainContent">
     <div class="container">
       <img src="sixeven2.png" alt="SixEven" class="center" id="sixEven">
@@ -264,7 +259,6 @@
     const updateModal = document.getElementById('updateModal');
     const closeModal = document.getElementById('closeModal');
     const updateVideo = document.getElementById('updateVideo');
-    const videoError = document.getElementById('videoError');
     const mainContent = document.getElementById('mainContent');
     const audio = document.getElementById('audio67');
     const playBtn = document.getElementById('playPause');
@@ -279,6 +273,7 @@
     const beatDuration = 60 / 130 * 1000;
     let isOld = false;
 
+    // Al hacer clic → quitar overlay, activar sonido y reproducir el intro
     clickOverlay.addEventListener('click', async () => {
       clickOverlay.style.display = 'none';
       introVideo.muted = false;
@@ -286,39 +281,41 @@
       try {
         await introVideo.play();
       } catch (err) {
-        console.log('Error intro:', err);
+        console.log('Error al reproducir intro:', err);
       }
     });
 
+    // Cuando termina el intro → mostrar el modal y reproducir Bixss.mp4
     introVideo.addEventListener('ended', () => {
       introVideo.style.display = 'none';
       updateModal.style.display = 'flex';
 
+      // Intentar reproducir automáticamente el video del modal
+      updateVideo.muted = false;
       updateVideo.currentTime = 0;
       updateVideo.play().catch(err => {
-        console.log('No se pudo reproducir el video:', err);
-        videoError.style.display = 'block';
+        console.log('No se pudo autoplay Bixss.mp4, el usuario puede usar los controles:', err);
       });
     });
 
-    updateVideo.addEventListener('error', () => {
-      videoError.style.display = 'block';
-    });
-
+    // Si el intro falla, pasar al modal
     introVideo.addEventListener('error', () => {
       setTimeout(() => {
         introVideo.style.display = 'none';
         clickOverlay.style.display = 'none';
         updateModal.style.display = 'flex';
+        updateVideo.play().catch(() => {});
       }, 400);
     });
 
+    // Cerrar el modal → pausar el video y mostrar el contenido principal
     closeModal.addEventListener('click', () => {
       updateVideo.pause();
       updateModal.style.display = 'none';
       mainContent.style.display = 'flex';
     });
 
+    // Controles del contenido principal
     playBtn.addEventListener('click', async () => {
       if (audio.paused) {
         audio.currentTime = 0;
@@ -342,6 +339,7 @@
       audioSixSeven.play();
     });
 
+    // Toggle 67 OLD / 67 NEW
     oldBtn.addEventListener('click', () => {
       if (isOld) {
         sixEven.src = 'sixeven2.png';
