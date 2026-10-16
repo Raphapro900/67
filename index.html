@@ -133,7 +133,7 @@
       background: rgba(255,255,255,0.15);
     }
 
-    /* Main content (hidden until modal closes) */
+    /* Main content */
     #mainContent {
       display: none;
       flex-direction: column;
@@ -258,6 +258,7 @@
     const clickOverlay = document.getElementById('clickOverlay');
     const updateModal = document.getElementById('updateModal');
     const closeModal = document.getElementById('closeModal');
+    const updateVideo = document.getElementById('updateVideo');
     const mainContent = document.getElementById('mainContent');
     const audio = document.getElementById('audio67');
     const playBtn = document.getElementById('playPause');
@@ -284,23 +285,32 @@
       }
     });
 
-    // Cuando termina el intro → mostrar el modal de actualización
+    // Cuando termina el intro → mostrar el modal y reproducir Bixss.mp4
     introVideo.addEventListener('ended', () => {
       introVideo.style.display = 'none';
       updateModal.style.display = 'flex';
+
+      // Intentar reproducir automáticamente el video del modal
+      updateVideo.muted = false;
+      updateVideo.currentTime = 0;
+      updateVideo.play().catch(err => {
+        console.log('No se pudo autoplay Bixss.mp4, el usuario puede usar los controles:', err);
+      });
     });
 
-    // Si el video falla, pasar al modal
+    // Si el intro falla, pasar al modal
     introVideo.addEventListener('error', () => {
       setTimeout(() => {
         introVideo.style.display = 'none';
         clickOverlay.style.display = 'none';
         updateModal.style.display = 'flex';
+        updateVideo.play().catch(() => {});
       }, 400);
     });
 
-    // Cerrar el modal → mostrar el contenido principal
+    // Cerrar el modal → pausar el video y mostrar el contenido principal
     closeModal.addEventListener('click', () => {
+      updateVideo.pause();
       updateModal.style.display = 'none';
       mainContent.style.display = 'flex';
     });
